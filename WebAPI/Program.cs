@@ -12,6 +12,7 @@ builder.Services.AddHttpClient<IVehicleService, VehicleService>(client =>
     client.BaseAddress = new Uri(nhtsaUrl ?? throw new InvalidOperationException("NHTSA Base URL is missing!"));
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+builder.Services.AddMemoryCache();
 
 
 builder.Services.AddControllers();
