@@ -1,4 +1,7 @@
+using WebAPI.Middleware;
 using WebAPI.Services;
+using WebAPI.Validators;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +16,18 @@ builder.Services.AddHttpClient<IVehicleService, VehicleService>(client =>
 
 builder.Services.AddControllers();
 
+
+builder.Services.AddValidatorsFromAssemblyContaining<GetModelsRequestValidator>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
