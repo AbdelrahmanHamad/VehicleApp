@@ -3,7 +3,6 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.ComponentModel.DataAnnotations;
 using WebAPI.Controllers;
 using WebAPI.Models;
 using WebAPI.Services;
