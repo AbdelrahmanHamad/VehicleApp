@@ -12,9 +12,18 @@ builder.Services.AddHttpClient<IVehicleService, VehicleService>(client =>
     client.BaseAddress = new Uri(nhtsaUrl ?? throw new InvalidOperationException("NHTSA Base URL is missing!"));
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddMemoryCache();
-
-
 builder.Services.AddControllers();
 
 
@@ -39,6 +48,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowOrigin");
 app.UseAuthorization();
 
 app.MapControllers();

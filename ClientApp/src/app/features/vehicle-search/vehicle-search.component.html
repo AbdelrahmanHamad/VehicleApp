@@ -1,0 +1,68 @@
+<div class="page-layout">
+    <div class="content-wrapper">
+        <div class="search-card">
+            <form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="form-layout">
+                <div class="input-group">
+                    <label>Manufacturer</label>
+                    <div class="autocomplete-wrapper">
+                        <input type="text" formControlName="make" placeholder="e.g. Ford, Tesla, BMW..."
+                            (focus)="filterMakes(searchForm.get('make')?.value)" autocomplete="off">
+                        <div class="dropdown-list shadow-lift" *ngIf="showAutocomplete">
+                            <div class="dropdown-item" *ngFor="let make of filteredMakes" (click)="selectMake(make)">
+                                {{ make.make_Name }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-text" *ngIf="searchForm.get('make')?.touched && searchForm.get('makeId')?.errors">
+                        Select from list.
+                    </div>
+                </div>
+
+                <div class="input-group year-pick">
+                    <label>Year</label>
+                    <input type="number" formControlName="year" placeholder="2024">
+                    <div class="error-text" *ngIf="searchForm.get('year')?.touched && searchForm.get('year')?.invalid">
+                        {{ yearError }}
+                    </div>
+                </div>
+
+                <button type="submit" [disabled]="searchForm.invalid || searching" class="submit-btn">
+                    <span *ngIf="!searching">Search</span>
+                    <span *ngIf="searching">Searching...</span>
+                </button>
+            </form>
+        </div>
+
+        <div *ngIf="loadingMakes" class="overlay-state">
+            <app-loading-spinner></app-loading-spinner>
+            <p>Loading...</p>
+        </div>
+
+        <div *ngIf="submitted && !searching" class="results-area">
+            <div class="area-header" *ngIf="types.length > 0 || models.length > 0">
+                <h2>{{ models.length }} {{ models.length === 1 ? 'model' : 'models' }}</h2>
+                <div class="category-pills" *ngIf="types.length > 0">
+                    <span class="pill" *ngFor="let type of types">{{ type.vehicleTypeName }}</span>
+                </div>
+            </div>
+
+            <div class="results-grid" *ngIf="models.length > 0">
+                <div class="vehicle-item" *ngFor="let model of models">
+                    <div class="item-info">
+                        <h3>{{ model.model_Name }}</h3>
+                        <span class="brand-label">{{ model.make_Name }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty-layout" *ngIf="models.length === 0 && !searching">
+                <h3>No models found</h3>
+                <p>Try searching for a different year or manufacturer.</p>
+            </div>
+        </div>
+
+        <div *ngIf="searching" class="results-loading">
+            <app-loading-spinner></app-loading-spinner>
+        </div>
+    </div>
+</div>
