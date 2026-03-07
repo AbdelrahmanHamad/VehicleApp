@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./WebAPI
+      dockerfile: Dockerfile
+    container_name: vehicle-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "7091:8080"
+
+    restart: always
+
+  frontend:
+    build:
+      context: ./ClientApp
+      dockerfile: Dockerfile
+    container_name: vehicle-web
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: always
